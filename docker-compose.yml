@@ -1,0 +1,30 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080" # Porta para o backend
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=quezia
+      - DB_NAME=esinais
+    depends_on:
+      - db
+    volumes:
+      - ./backend/src/public:/app/public # Mapeando o diretório public completo
+  
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: quezia
+      MYSQL_DATABASE: esinais
+    ports:
+      - "3306:3306" # Porta para o banco de dados
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000" # Porta para o frontend
+    depends_on:
+      - backend
